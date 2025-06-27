@@ -1,3 +1,6 @@
+build
+distro
+
 # C++ objects and libs
 *.slo
 *.lo

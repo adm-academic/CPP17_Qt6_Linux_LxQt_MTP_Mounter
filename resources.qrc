@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>state_D.png</file>
+        <file>state_M.png</file>
+        <file>state_D.svg</file>
+        <file>state_M.svg</file>
+        <file>state_C.png</file>
+        <file>state_C.svg</file>
+    </qresource>
+</RCC>
