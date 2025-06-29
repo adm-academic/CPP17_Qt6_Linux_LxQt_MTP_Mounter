@@ -49,6 +49,7 @@ public slots:
     void slot_onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void slot_on_thread_error(QString err);
     void slot_change_tray_icon(QString icon_path, QString tool_tip);
+    void slot_check_all_dependencies();
 
 signals:
     void sig_request_finish_threaded_state_machine();

@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QScreen>
 #include <QMessageBox>
+#include <QFileInfo>
 #include <iostream>
 #include <string>
 #include "common.h"
@@ -12,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     this->ui->setupUi(this);
     this->slot_center_this_Window();
+
+    this->slot_check_all_dependencies();
 
     this->tray_icon = new QSystemTrayIcon();
     this->tray_icon->setIcon( QIcon(":/images/state_D.png") );
@@ -56,6 +59,34 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->state_machine_thread->start(); // старутем все эти хитрые объекты и в результате главный цикл
                                          // стейт-машины в отдельном потоке
+
+}
+
+void MainWindow::slot_check_all_dependencies()
+{
+    // bash, mountpoint, file, fusermount, jmtpfs
+    QStringList dependeciest_strings;
+    dependeciest_strings.append("bash");
+    dependeciest_strings.append("mountpoint");
+    dependeciest_strings.append("file");
+    dependeciest_strings.append("fusermount");
+    dependeciest_strings.append("jmtpfs");
+
+    QString dep_str;
+    foreach (dep_str, dependeciest_strings){
+        QString which_str = fast_exec( "which " + dep_str ).trimmed();
+        if ( ! which_str.trimmed().startsWith("/") ){
+            std::wcout << L"CRITICAL ERROR when CHECK dependecies:" << std::endl
+                       << "\t" << dep_str.toStdWString() << std::endl << std::flush;
+            qApp->exit( -1 );
+        };
+
+        if (! QFileInfo::exists(which_str) ){
+            std::wcout << L"CRITICAL ERROR when CHECK dependecies:" << std::endl
+                       << "\t" << which_str.toStdWString() << std::endl << std::flush;
+            qApp->exit( -1 );
+        };
+    };
 
 }
 
@@ -155,6 +186,8 @@ void MainWindow::slot_change_tray_icon(QString icon_path, QString tool_tip)
     this->tray_icon->setToolTip( tool_tip );
 
 }
+
+
 
 void MainWindow::on_pb_About_Qt_clicked()
 {
